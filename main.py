@@ -32,26 +32,32 @@ def estrai_offerte():
 
     offerte = []
     for div in soup.find_all("div", class_="DealContent"):
-        titolo = div.find("span", class_="DealTitle").get_text(strip=True) if div.find("span", class_="DealTitle") else None
-        prezzo = div.find("span", class_="a-price-whole")
-        sconto = div.find("span", class_="a-size-mini")
+        titolo_tag = div.find("span", class_="DealTitle")
+        prezzo_tag = div.find("span", class_="a-price-whole")
+        sconto_tag = div.find("span", class_="a-size-mini")
+        link_tag = div.find("a")
+        immagine_tag = div.find("img")
 
-        if titolo and prezzo and sconto:
-            testo_sconto = sconto.get_text(strip=True)
-            if "%" in testo_sconto:
-                valore = int(testo_sconto.replace("%", "").replace("-", "").strip())
+        if titolo_tag and prezzo_tag and sconto_tag and link_tag and immagine_tag:
+            titolo = titolo_tag.get_text(strip=True)
+            prezzo = prezzo_tag.get_text(strip=True)
+            sconto = sconto_tag.get_text(strip=True)
+            link = "https://www.amazon.it" + link_tag["href"]
+            immagine = immagine_tag["src"]
+
+            # ✅ Filtra solo link validi
+            if ("/dp/" in link or "/gp/product/" in link) and "%" in sconto:
+                valore = int(sconto.replace("%", "").replace("-", "").strip())
                 if valore >= 8 and any(cat.lower() in titolo.lower() for cat in CATEGORIE):
-                    link = "https://www.amazon.it" + div.find("a")["href"]
-                    immagine = div.find("img")["src"]
                     offerte.append({
                         "titolo": titolo,
-                        "prezzo": prezzo.get_text(strip=True),
-                        "sconto": testo_sconto,
+                        "prezzo": prezzo,
+                        "sconto": sconto,
                         "link": f"{link}?tag={TAG}",
                         "immagine": immagine
                     })
-
     return offerte
+
 
 # 🧠 Frasi ironiche
 intro = [
