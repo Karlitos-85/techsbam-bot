@@ -45,7 +45,7 @@ def estrai_offerte():
             raw_link = link_tag["href"]
             immagine = immagine_tag["src"]
 
-            # ✅ Estrai l'ASIN dal link se presente
+            # ✅ Estrai l'ASIN dal link
             asin = None
             if "/dp/" in raw_link:
                 asin = raw_link.split("/dp/")[1].split("/")[0]
