@@ -16,7 +16,11 @@ bot = Bot(token=TOKEN)
 AMAZON_URL = "https://www.amazon.it/gp/goldbox"
 
 # 🧠 Categorie da cercare
-CATEGORIE = ["informatica", "tech", "gaming", "elettrodomestici", "elettronica"]
+CATEGORIE = [
+    "informatica", "tech", "gaming", "elettronica", "elettrodomestici",
+    "smartwatch", "monitor", "tablet", "cuffie", "SSD", "stampante",
+    "notebook", "tv 4k", "soundbar", "mouse", "tastiera", "router", "smart home"
+]
 
 # 📦 Funzione per estrarre offerte reali
 def estrai_offerte():
@@ -36,7 +40,7 @@ def estrai_offerte():
             testo_sconto = sconto.get_text(strip=True)
             if "%" in testo_sconto:
                 valore = int(testo_sconto.replace("%", "").replace("-", "").strip())
-                if valore >= 15 and any(cat.lower() in titolo.lower() for cat in CATEGORIE):
+               if valore >= 8 and any(cat.lower() in titolo.lower() for cat in CATEGORIE):
                     link = "https://www.amazon.it" + div.find("a")["href"]
                     immagine = div.find("img")["src"]
                     offerte.append({
