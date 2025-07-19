@@ -3,51 +3,50 @@ from telegram import Bot
 from telegram.constants import ParseMode
 
 # ✅ Dati reali
-TOKEN = "7968531317:AAFZuMH8XgWkMvSjE1Wof8Ujpm0-ffdizfc"
+TOKEN = "6110414793:AAE6USmIOGUOGWAnwEX9UxtTxmbMZot1jYY"
 CHANNEL = "@techsbam"
 TAG = "karlitos85-21"
 
-# ✅ Offerta di test
+# ✅ Offerta di test (solo testo, niente immagine)
 def estrai_offerte():
     return [{
         "titolo": "SSD Samsung 980 1TB NVMe",
         "prezzo": "69,99€",
         "sconto": "22%",
-        "link": f"https://www.amazon.it/dp/B08N5M7S6K/?tag={TAG}",
-        "immagine": "https://m.media-amazon.com/images/I/61EQdeD3lXL._AC_SL1500_.jpg"
+        "link": f"https://www.amazon.it/dp/B08N5M7S6K/?tag={TAG}"
     }]
 
-# ✅ Funzione principale asincrona
+# ✅ Funzione principale
 async def main():
     bot = Bot(token=TOKEN)
 
     # Messaggio di benvenuto
     await bot.send_message(
         chat_id=CHANNEL,
-        text="Benvenuti su Tech & Sbam 💥 — dove le offerte Amazon sono più puntuali di me alla pausa pranzo."
+        text="Benvenuti su Tech & Sbam 💥 — dove le offerte Amazon arrivano puntuali come il caffè!"
     )
 
     offerte = estrai_offerte()
 
     for prodotto in offerte:
         messaggio = (
-            f"📦 {prodotto['titolo']}\n"
+            f"📦 *{prodotto['titolo']}*\n"
             f"💰 Prezzo: {prodotto['prezzo']}\n"
             f"🔻 Sconto: {prodotto['sconto']}\n"
             f"👉 [Vai all’offerta]({prodotto['link']})"
         )
 
-        # Pausa per evitare flood Telegram
-        await asyncio.sleep(2)
+        try:
+            await bot.send_message(
+                chat_id=CHANNEL,
+                text=messaggio,
+                parse_mode=ParseMode.MARKDOWN
+            )
+        except Exception as e:
+            print(f"Errore nell'invio: {e}")
 
-        # Invio immagine + caption
-        await bot.send_photo(
-            chat_id=CHANNEL,
-            photo=prodotto["immagine"],
-            caption=messaggio,
-            parse_mode=ParseMode.MARKDOWN
-        )
+        await asyncio.sleep(3)  # Pausa per evitare flood
 
-# ✅ Avvio del bot
+# ✅ Avvio bot
 if __name__ == "__main__":
     asyncio.run(main())
