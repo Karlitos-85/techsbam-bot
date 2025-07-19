@@ -1,5 +1,4 @@
 import asyncio
-import requests
 from telegram import Bot
 from telegram.constants import ParseMode
 
@@ -18,7 +17,7 @@ def estrai_offerte():
         "immagine": "https://m.media-amazon.com/images/I/61EQdeD3lXL._AC_SL1500_.jpg"
     }]
 
-# ✅ Funzione principale
+# ✅ Funzione principale asincrona
 async def main():
     bot = Bot(token=TOKEN)
 
@@ -38,7 +37,7 @@ async def main():
             f"👉 [Vai all’offerta]({prodotto['link']})"
         )
 
-        # 🕒 Pausa per evitare flood Telegram
+        # Pausa per evitare flood Telegram
         await asyncio.sleep(2)
 
         # Invio immagine + caption
@@ -49,32 +48,6 @@ async def main():
             parse_mode=ParseMode.MARKDOWN
         )
 
-# ✅ Avvio bot
-if __name__ == "__main__":
-    asyncio.run(main())
-
-# 🧠 Frasi ironiche
-intro = [
-    "📦 Amazon ci vizia oggi... come se avesse sensi di colpa.",
-    "🎮 Sconto tech o provocazione personale? Decidi tu.",
-    "⚠️ Offerta che non puoi ignorare (ma puoi far finta di sì)",
-    "🥲 Hai detto 'non spendo più'? Mi dispiace.",
-    "🔌 Offerta tech — ma solo se lo meriti. Tu lo meriti."
-]
-
-# 🚀 Funzione principale
-async def main():
-    await bot.send_message(chat_id=CHANNEL, text="Benvenuti su Tech & Sbam 💥 — dove le offerte Amazon sono più puntuali di me alla pausa pranzo.")
-    while True:
-        offerte = estrai_offerte()
-        if offerte:
-            prodotto = random.choice(offerte)
-            messaggio = f"{random.choice(intro)}\n\n🛒 {prodotto['titolo']}\n💸 Prezzo: {prodotto['prezzo']} (-{prodotto['sconto']})\n➡️ {prodotto['link']}\n\n#TechSbamDelGiorno"
-            await bot.send_photo(chat_id=CHANNEL, photo=prodotto["immagine"], caption=messaggio)
-        else:
-           await bot.send_message(chat_id=CHANNEL, text=messaggio)
-await asyncio.sleep(3)  # evita flood
-await bot.send_photo(chat_id=CHANNEL, photo=prodotto["immagine"])
-
+# ✅ Avvio del bot
 if __name__ == "__main__":
     asyncio.run(main())
