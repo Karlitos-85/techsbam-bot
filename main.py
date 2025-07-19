@@ -1,36 +1,57 @@
-import os
 import asyncio
-import random
 import requests
-from bs4 import BeautifulSoup
 from telegram import Bot
+from telegram.constants import ParseMode
 
-# 🔐 Variabili ambientali
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-CHANNEL = os.getenv("TELEGRAM_CHANNEL")
-TAG = os.getenv("AMAZON_TAG")
+# ✅ Dati reali
+TOKEN = "6110414793:AAE6USmIOGUOGWAnwEX9UxtTxmbMZot1jYY"
+CHANNEL = "@techsbam"
+TAG = "karlitos85-21"
 
-bot = Bot(token=TOKEN)
-
-# 🎯 URL Amazon Offerte del Giorno
-AMAZON_URL = "https://www.amazon.it/gp/goldbox"
-
-# 🧠 Categorie da cercare
-CATEGORIE = [
-    "informatica", "tech", "gaming", "elettronica", "elettrodomestici",
-    "smartwatch", "monitor", "tablet", "cuffie", "SSD", "stampante",
-    "notebook", "tv 4k", "soundbar", "mouse", "tastiera", "router", "smart home"
-]
-
-# 📦 Funzione per estrarre offerte reali
+# ✅ Offerta di test
 def estrai_offerte():
     return [{
         "titolo": "SSD Samsung 980 1TB NVMe",
         "prezzo": "69,99€",
         "sconto": "22%",
-        "link": "https://www.amazon.it/dp/B08N5M7S6K/?tag=karlitos85-21",
+        "link": f"https://www.amazon.it/dp/B08N5M7S6K/?tag={TAG}",
         "immagine": "https://m.media-amazon.com/images/I/61EQdeD3lXL._AC_SL1500_.jpg"
     }]
+
+# ✅ Funzione principale
+async def main():
+    bot = Bot(token=TOKEN)
+
+    # Messaggio di benvenuto
+    await bot.send_message(
+        chat_id=CHANNEL,
+        text="Benvenuti su Tech & Sbam 💥 — dove le offerte Amazon sono più puntuali di me alla pausa pranzo."
+    )
+
+    offerte = estrai_offerte()
+
+    for prodotto in offerte:
+        messaggio = (
+            f"📦 {prodotto['titolo']}\n"
+            f"💰 Prezzo: {prodotto['prezzo']}\n"
+            f"🔻 Sconto: {prodotto['sconto']}\n"
+            f"👉 [Vai all’offerta]({prodotto['link']})"
+        )
+
+        # 🕒 Pausa per evitare flood Telegram
+        await asyncio.sleep(2)
+
+        # Invio immagine + caption
+        await bot.send_photo(
+            chat_id=CHANNEL,
+            photo=prodotto["immagine"],
+            caption=messaggio,
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+# ✅ Avvio bot
+if __name__ == "__main__":
+    asyncio.run(main())
 
 # 🧠 Frasi ironiche
 intro = [
