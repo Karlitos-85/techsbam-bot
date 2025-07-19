@@ -51,8 +51,9 @@ async def main():
             messaggio = f"{random.choice(intro)}\n\n🛒 {prodotto['titolo']}\n💸 Prezzo: {prodotto['prezzo']} (-{prodotto['sconto']})\n➡️ {prodotto['link']}\n\n#TechSbamDelGiorno"
             await bot.send_photo(chat_id=CHANNEL, photo=prodotto["immagine"], caption=messaggio)
         else:
-            await bot.send_message(chat_id=CHANNEL, text="Oggi Amazon non ha voglia di sbam... riproviamo tra un'ora.")
-        await asyncio.sleep(3600)  # ogni ora
+           await bot.send_message(chat_id=CHANNEL, text=messaggio)
+await asyncio.sleep(3)  # evita flood
+await bot.send_photo(chat_id=CHANNEL, photo=prodotto["immagine"])
 
 if __name__ == "__main__":
     asyncio.run(main())
