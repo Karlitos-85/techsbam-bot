@@ -24,48 +24,13 @@ CATEGORIE = [
 
 # 📦 Funzione per estrarre offerte reali
 def estrai_offerte():
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
-    response = requests.get(AMAZON_URL, headers=headers)
-    soup = BeautifulSoup(response.content, "html.parser")
-
-    offerte = []
-    for div in soup.find_all("div", class_="DealContent"):
-        titolo_tag = div.find("span", class_="DealTitle")
-        prezzo_tag = div.find("span", class_="a-price-whole")
-        sconto_tag = div.find("span", class_="a-size-mini")
-        link_tag = div.find("a")
-        immagine_tag = div.find("img")
-
-        if titolo_tag and prezzo_tag and sconto_tag and link_tag and immagine_tag:
-            titolo = titolo_tag.get_text(strip=True)
-            prezzo = prezzo_tag.get_text(strip=True)
-            sconto = sconto_tag.get_text(strip=True)
-            raw_link = link_tag["href"]
-            immagine = immagine_tag["src"]
-
-            # Estrai l'ASIN dal link
-            asin = None
-            if "/dp/" in raw_link:
-                asin = raw_link.split("/dp/")[1].split("/")[0]
-            elif "/gp/product/" in raw_link:
-                asin = raw_link.split("/gp/product/")[1].split("/")[0]
-
-            # Costruisci link valido solo se c'è l'ASIN
-            if asin and "%" in sconto:
-                valore = int(sconto.replace("%", "").replace("-", "").strip())
-                if valore >= 8 and any(cat.lower() in titolo.lower() for cat in CATEGORIE):
-                    link = f"https://www.amazon.it/dp/{asin}/?tag={TAG}"
-                    offerte.append({
-                        "titolo": titolo,
-                        "prezzo": prezzo,
-                        "sconto": sconto,
-                        "link": link,
-                        "immagine": immagine
-                    })
-
-    return offerte
+    return [{
+        "titolo": "SSD Samsung 980 1TB NVMe",
+        "prezzo": "69,99€",
+        "sconto": "22%",
+        "link": "https://www.amazon.it/dp/B08N5M7S6K/?tag=karlitos85-21",
+        "immagine": "https://m.media-amazon.com/images/I/61EQdeD3lXL._AC_SL1500_.jpg"
+    }]
 
 # 🧠 Frasi ironiche
 intro = [
