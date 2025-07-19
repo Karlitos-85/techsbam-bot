@@ -3,11 +3,11 @@ from telegram import Bot
 from telegram.constants import ParseMode
 
 # ✅ Dati reali
-TOKEN = "6110414793:AAE6USmIOGUOGWAnwEX9UxtTxmbMZot1jYY"
+TOKEN = "7968531317:AAFZuMH8XgWkMvSjE1Wof8Ujpm0-ffdizfc"
 CHANNEL = "@techsbam"
 TAG = "karlitos85-21"
 
-# ✅ Offerta di test (solo testo, niente immagine)
+# ✅ Offerta di test
 def estrai_offerte():
     return [{
         "titolo": "SSD Samsung 980 1TB NVMe",
