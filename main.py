@@ -33,12 +33,14 @@ def estrai_offerte():
         link_tag = div.find("a")
         immagine_tag = div.find("img")
 
-        if titolo_tag and prezzo_tag and sconto_tag and link_tag and immagine_tag:
+        if titolo_tag and prezzo_tag and sconto_tag and link_tag:
             titolo = titolo_tag.get_text(strip=True)
             prezzo = prezzo_tag.get_text(strip=True)
             sconto = sconto_tag.get_text(strip=True)
             raw_link = link_tag["href"]
-            immagine = immagine_tag["src"]
+
+            # ✅ Immagine di fallback sicura (Amazon logo SVG)
+            immagine = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1024px-Amazon_logo.svg.png"
 
             # Estrai l'ASIN dal link
             asin = None
@@ -83,9 +85,10 @@ async def main():
         )
 
         try:
-            await bot.send_message(
+            await bot.send_photo(
                 chat_id=CHANNEL,
-                text=messaggio,
+                photo=prodotto["immagine"],
+                caption=messaggio,
                 parse_mode=ParseMode.MARKDOWN
             )
         except Exception as e:
